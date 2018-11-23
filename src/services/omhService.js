@@ -2,8 +2,7 @@ import axios from 'axios';
 import openmrsServer from "./crud";
 
 
-
-export default class omhService {
+export default class OmhService {
 
 constructor(patientId) {
   this.omhJsonServer = axios.create({

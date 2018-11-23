@@ -13,6 +13,7 @@
     "vue": "^2.5.17",
     "vue-router": "^3.0.1",
     "axios": "^0.18.0",
+    "fhirclient": "^0.1.12",
     "vuex-rest-api": "^2.9.0",
     "vuex": "^3.0.1"
   },
