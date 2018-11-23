@@ -1,4 +1,5 @@
 import axios from 'axios';
+import openmrsServer from "./crud";
 
 
 
@@ -12,10 +13,14 @@ constructor(patientId) {
       'Content-Type': 'application/json',
     },
   });
+    this.omhServer = axios.create({
+        baseURL: process.env.omhOnFhirRedirectUri,
+        credentials: 'same-origin',
+    });
   this.patientId = patientId;
 }
 
-  static login(shimKey) {
+    login(shimKey) {
     console.log("Logging in to Shimmer");
     this.loginSuccessful = false;
     var shimmerAuthUrl =
@@ -26,7 +31,7 @@ constructor(patientId) {
     console.log("Authorizing with Shimmer " + shimmerAuthUrl);
     this.loginWindow = window.open(shimmerAuthUrl, 'Sign In', 'left=100,top=100,width=500,height=600');  }
 
-  static getPatientNameFromObject (pt) {
+    getPatientNameFromObject(pt) {
     if (pt.name) {
       var names = pt.name.map(function(name) {
           return name.given.join(" ") + " " + name.family;
@@ -87,15 +92,53 @@ constructor(patientId) {
     this.loginSuccess = loginSuccessful;
   };
 
-  static getResource(url, _id) {
-    return openmrsServer.get(`${url}/${_id}`);
-  }
 
-  static updateResource(url, resource) {
-    return openmrsServer.put(`${url}/${resource._id}`, resource);
-  }
+    requestDocumentReference(shimmerId, startDate, endDate) {
+        var shimmerDocRefUrl = process.env.omhOnFhirAPIBase + "/DocumentReference?subject=" + shimmerId;
 
-  static deleteResource(url, _id) {
-    return openmrsServer.delete(`${url}/${_id}`);
-  }
+        if (startDate) {
+            shimmerDocRefUrl = shimmerDocRefUrl + "&date=" + startDate.toISOString().substring(0, 10);//to make format 'yyyy-MM-dd'
+        }
+        if (endDate) {
+            shimmerDocRefUrl = shimmerDocRefUrl + "&date=" + endDate.toISOString().substring(0, 10);//to make format 'yyyy-MM-dd'
+        }
+        console.log("Requesting Document Reference " + shimmerDocRefUrl);
+
+        //returns a promise that contains headers, status, and data
+        return this.omhServer.get(shimmerDocRefUrl);
+    };
+
+    requestObservation(shimmerId, startDate, endDate) {
+        return this.requestOmhResource("Observation", shimmerId, startDate, endDate);
+    };
+
+    requestOmhResource(resource, shimmerId, startDate, endDate) {
+        var shimmerDocRefUrl = process.env.omhOnFhirAPIBase + "/" + resource + "?subject=" + shimmerId;
+
+        if (startDate) {
+            shimmerDocRefUrl = shimmerDocRefUrl + "&date=" + startDate.toISOString().substring(0, 10);//to make format 'yyyy-MM-dd'
+        }
+        if (endDate) {
+            shimmerDocRefUrl = shimmerDocRefUrl + "&date=" + endDate.toISOString().substring(0, 10);//to make format 'yyyy-MM-dd'
+        }
+        console.log("Requesting " + resource + " " + shimmerDocRefUrl);
+
+        //returns a promise that contains headers, status, and data
+        return this.omhServer.get(shimmerDocRefUrl);
+    };
+
+    requestBinaryAsJson(binaryUrl) {
+        const shimmerBinaryUrl = process.env.omhOnFhirAPIBase + "/" + binaryUrl;
+        console.log("Requesting Binary " + shimmerBinaryUrl);
+        //returns a promise that contains headers, status, and data
+        return this.omhJsonServer.get(shimmerBinaryUrl);
+    };
+
+    requestBinaryAsBase64(binaryUrl) {
+        const shimmerBinaryUrl = process.env.omhOnFhirAPIBase + "/" + binaryUrl;
+        console.log("Requesting Binary " + shimmerBinaryUrl);
+        //returns a promise that contains headers, status, and data
+        return this.omhServer.get(shimmerBinaryUrl);
+    };
+
 }
