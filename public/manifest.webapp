@@ -1,0 +1,19 @@
+{
+  "version": "1.0.0",
+  "name": "phr",
+  "description": "PHR App",
+  "launch_path": "index.html",
+  "icons": {
+    "48": "omrs-button.png"
+  },
+  "developer": {
+    "name": "Bell Eapen",
+    "url": "https://nuchange.ca"
+  },
+  "default_locale": "en",
+  "activities": {
+    "openmrs": {
+      "href": "*"
+    }
+  }
+}
