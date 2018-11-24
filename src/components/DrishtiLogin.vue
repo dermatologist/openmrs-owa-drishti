@@ -4,13 +4,10 @@
         <div class="alert-warning" v-if="alertMsg">
             {{alertMsg}}
         </div>
-        <p>Select one of the fitness tracking applications below, and complete its authorization process, to link this
+        <p>Select one of the fitness tracking applications below,
+            and complete its authorization process, to link this
             application to the account.</p>
-        <!--<div>-->
-        <!--<button class="btn btn-default" ng-click="$ctrl.loginWithFitbit()" disabled><img src="{{$ctrl.env.baseUrl}}img/fitbit-transparent.png" height="25" width="99"></button>-->
-        <!--</div>-->
         <div>
-            <!--<button class="btn btn-default" ng-click="$ctrl.loginWithGoogleFit()"><img src="{{$ctrl.env.baseUrl}}img/Google-Fit-Logo-transparent.png" height="25" width="99"></button>-->
             <a class="btn btn-default" v-on:click="handleClick()"><img
                     :src="logoUrl" height="25" width="99"></a>
         </div>
@@ -19,7 +16,7 @@
 </template>
 
 <script>
-    // import OmhService from '../services/omhService';
+    import OmhService from '../services/omhService';
 
     export default {
         name: 'DrishtiLogin',
@@ -46,6 +43,8 @@
             // VUE_APP_ prefix is REQUIRED.
             handleClick() {
                 console.log(process.env.VUE_APP_googleFitShim);
+                let omhSevice = new OmhService('TestPatient');
+                omhSevice.login(process.env.VUE_APP_googleFitShim);
             },
 
 
