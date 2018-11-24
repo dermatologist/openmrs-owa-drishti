@@ -2,7 +2,7 @@
   <div class="home">
     <img alt="Vue logo" src="omrs-button.png">
     <HelloPatient msg="Welcome to Your Vue.js App"/>
-      <DrishtiLogin logoUrl="@/assets/Google-Fit-Logo-transparent.png"/>
+    <DrishtiLogin logoUrl="openmrs-with-title-small.png"/>
 
   </div>
 </template>

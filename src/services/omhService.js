@@ -28,7 +28,8 @@ export default class OmhService {
             '&shimkey=' + shimKey;
 
         console.log(`Authorizing with Shimmer ${shimmerAuthUrl}`);
-        this.loginWindow = window.open(shimmerAuthUrl, 'Sign In', 'left=100,top=100,width=500,height=600');
+        //this.loginWindow = window.open(shimmerAuthUrl, 'Sign In', 'left=100,top=100,width=500,height=600');
+        window.location = shimmerAuthUrl;
     }
 
     getPatientNameFromObject(pt) {

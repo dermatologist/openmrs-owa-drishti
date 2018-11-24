@@ -4,6 +4,7 @@
         <div class="alert-warning" v-if="alertMsg">
             {{alertMsg}}
         </div>
+        <div>{{ $store.state.shimmerId }}</div>
         <p>Select one of the fitness tracking applications below,
             and complete its authorization process, to link this
             application to the account.</p>
@@ -17,6 +18,7 @@
 
 <script>
     import OmhService from '../services/omhService';
+    import {mapGetters, mapActions} from 'vuex'
 
     export default {
         name: 'DrishtiLogin',
@@ -37,7 +39,10 @@
         created() {
 
         },
-        computed: {},
+        computed: mapGetters([
+            'shimmer'
+        ]),
+
         methods: {
 
             // VUE_APP_ prefix is REQUIRED.
@@ -53,7 +58,12 @@
         watch: {},
 
         mounted() {
-
+            if (this.$route.query.loginSuccess == 'true') {
+                this.$router.push('/about');
+            }
+            this.$store.commit('setShimmerId', this.$route.query.shimmerId);
+            console.log(this.$route.query);
+            console.log(this.$store.state.shimmerId);
         },
 
         destroyed() {
