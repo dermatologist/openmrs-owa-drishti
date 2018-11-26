@@ -15,7 +15,7 @@ const activity = new Vapi({
     state: {
         act: '',
         acts: [],
-        },
+    },
 })
 // Step 3
 /*
@@ -24,9 +24,9 @@ const activity = new Vapi({
 location: json.sessionLocation
 
  */
-.get({
+    .get({
     action: 'queryActivity',
-    property: 'patients',
+        property: 'acts',
     queryParams: true,
     path: `${process.env.VUE_APP_omhOnFhirAPIBase}/Observation`,
   })

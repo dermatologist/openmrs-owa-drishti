@@ -1,9 +1,9 @@
 <template>
-  
+
 
 <div id="activity">
 <h1>Activity</h1>
-<h2>Search Patient Activity for patient: {{this.session.user.uuid}}</h2>
+    <h2>Search Patient Activity for patient: {{session.user.display}}</h2>
 <form>
     <h4>Search for activity between date range</h4>
     <div class="form-group">
@@ -18,18 +18,18 @@
         <!-- input value is of the format yyyy-MM-dd by default -->
         <input v-model="endDate" type="date" id="endDate" name="endDate">
     </div>
-    <button class="btn btn-default" v-on:click="handleClick()">Find step-count as FHIR STU3 Observation</button>
+    <button class="btn btn-default" @click.prevent="handleClick()">Find step-count as FHIR STU3 Observation</button>
 </form>
 
 
-<div ng-if="$ctrl.waitingForObservationSearch" class="alert alert-info">
+    <div v-if="pending" class="alert alert-info">
     <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>
     Searching for STU3 Observations...
 </div>
 
-<div ng-if="$ctrl.observationResponse.length > 0" class="container-fluid" id="observationResponse">
+    <div v-if="activity.length > 0" class="container-fluid" id="observationResponse">
     <pre>
-        {{$ctrl.observationResponse}}
+        {{activity}}
     </pre>
 </div>
 
@@ -39,7 +39,8 @@
 
 <script>
 
-import Patient from '../services/activityService';
+    import Activity from '../services/activityService';
+    import Session from '../services/sessionService';
 
 export default {
   name: 'DrishtiActivity',
@@ -68,7 +69,7 @@ export default {
       return Activity.state.pending.patients;
     },
     activity() {
-      return Activity.state.patients.results;
+        return Activity.state.acts;
     },
     session() {
       return Session.state.session;
@@ -77,12 +78,16 @@ export default {
   },
   methods: {
 
-            handleClick() {
-                console.log(process.env.VUE_APP_googleFitShim);
-                let omhSevice = new OmhService(this.session.user.uuid);
-                omhSevice.login(process.env.VUE_APP_googleFitShim);
-                console.log(this.session.user.uuid);
-            },
+      handleClick() {
+          const dateParam = new Date(this.startDate);
+          const params = {
+              date: dateParam.toISOString().substring(0, 10),
+              subject: this.$store.state.shimmerId,
+
+          };
+          Activity.dispatch('queryActivity', {params});
+          console.log(this.session.user.uuid);
+      },
 
   },
 
@@ -91,6 +96,7 @@ export default {
   },
 
   mounted() {
+      Session.dispatch('getSession');
   },
 
   destroyed() {

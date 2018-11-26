@@ -2,7 +2,6 @@ import axios from 'axios';
 
 
 export default class OmhService {
-
     constructor(patientId) {
         this.omhJsonServer = axios.create({
             baseURL: process.env.omhOnFhirRedirectUri,
@@ -22,13 +21,13 @@ export default class OmhService {
         console.log('Logging in to Shimmer');
     this.loginSuccessful = false;
         const shimmerAuthUrl =
-            process.env.VUE_APP_omhOnFhirAPIBase +
-            process.env.VUE_APP_omhOnFhirAPIShimmerAuth +
-            '?ehrId=' + this.getPatientId() +
-            '&shimkey=' + shimKey;
+            `${process.env.VUE_APP_omhOnFhirAPIBase +
+            process.env.VUE_APP_omhOnFhirAPIShimmerAuth
+                }?ehrId=${this.getPatientId()
+                }&shimkey=${shimKey}`;
 
         console.log(`Authorizing with Shimmer ${shimmerAuthUrl}`);
-        //this.loginWindow = window.open(shimmerAuthUrl, 'Sign In', 'left=100,top=100,width=500,height=600');
+        // this.loginWindow = window.open(shimmerAuthUrl, 'Sign In', 'left=100,top=100,width=500,height=600');
         window.location = shimmerAuthUrl;
     }
 

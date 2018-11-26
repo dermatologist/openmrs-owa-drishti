@@ -56,7 +56,7 @@
             // VUE_APP_ prefix is REQUIRED.
             handleClick() {
                 console.log(process.env.VUE_APP_googleFitShim);
-                let omhSevice = new OmhService(this.session.user.uuid);
+                const omhSevice = new OmhService(this.session.user.uuid);
                 omhSevice.login(process.env.VUE_APP_googleFitShim);
                 console.log(this.session.user.uuid);
             },
@@ -68,12 +68,12 @@
 
         mounted() {
             /*
-            The vue-router query string has the following issue
-            https://github.com/vuejs/vue-router/issues/2125
-            Hence using URLSearchParams as described here:
-            https://www.npmjs.com/package/url-search-params-polyfill
-            TODO: Change once the vue-router bug is fixed
-             */
+                    The vue-router query string has the following issue
+                    https://github.com/vuejs/vue-router/issues/2125
+                    Hence using URLSearchParams as described here:
+                    https://www.npmjs.com/package/url-search-params-polyfill
+                    TODO: Change once the vue-router bug is fixed
+                     */
             // if (this.$route.query.loginSuccess == 'true') {
             //     this.$router.push('/about');
             // }
@@ -81,9 +81,9 @@
             // console.log(this.$route.query);
             // console.log(this.$store.state.shimmerId);
             const search4 = new URLSearchParams(window.location.search);
-            if (search4.get("loginSuccess") == "true") {
+            if (search4.get('loginSuccess') == 'true') {
                 this.$router.push('/about');
-                this.$store.commit('setShimmerId', search4.get("shimmerId"));
+                this.$store.commit('setShimmerId', search4.get('shimmerId'));
             }
             console.log(this.$store.state.shimmerId);
 

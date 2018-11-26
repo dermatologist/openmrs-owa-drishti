@@ -6,7 +6,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
 
-      shimmerId: ''
+      shimmerId: '',
   },
   mutations: {
       setShimmerId(state, id) {
@@ -14,13 +14,13 @@ export default new Vuex.Store({
       },
       clearShimmerId(state) {
           state.shimmerId = '';
-      }
+      },
 
   },
   actions: {
 
   },
   getters: {
-      shimmer: state => state.shimmerId
+      shimmer: state => state.shimmerId,
   },
 });
