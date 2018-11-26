@@ -18,7 +18,7 @@
 
 <script>
     import OmhService from '../services/omhService';
-    import {mapGetters, mapActions} from 'vuex'
+    import Session from '../services/sessionService';
     import 'url-search-params-polyfill';
 
     export default {
@@ -40,17 +40,25 @@
         created() {
 
         },
-        computed: mapGetters([
-            'shimmer'
-        ]),
-
+        computed: {
+            error() {
+                return Session.state.error.session;
+            },
+            pending() {
+                return Session.state.pending.session;
+            },
+            session() {
+                return Session.state.session;
+            },
+        },
         methods: {
 
             // VUE_APP_ prefix is REQUIRED.
             handleClick() {
                 console.log(process.env.VUE_APP_googleFitShim);
-                let omhSevice = new OmhService('TestPatient');
+                let omhSevice = new OmhService(this.session.user.uuid);
                 omhSevice.login(process.env.VUE_APP_googleFitShim);
+                console.log(this.session.user.uuid);
             },
 
 
@@ -77,7 +85,9 @@
                 this.$router.push('/about');
                 this.$store.commit('setShimmerId', search4.get("shimmerId"));
             }
-            console.log(this.$store.state.shimmerId)
+            console.log(this.$store.state.shimmerId);
+
+            Session.dispatch('getSession');
         },
 
         destroyed() {
