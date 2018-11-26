@@ -3,22 +3,22 @@
 
 <div id="activity">
 <h1>Activity</h1>
-<h2>Search Patient Activity for : {{$ctrl.getPatientName()}}</h2>
+<h2>Search Patient Activity for patient: {{this.session.user.uuid}}</h2>
 <form>
     <h4>Search for activity between date range</h4>
     <div class="form-group">
         <label for="startDate">Start Date:</label>
         <!-- Using date input type for details see: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/date -->
         <!-- input value is of the format yyyy-MM-dd by default -->
-        <input ng-model="$ctrl.startDate" type="date" id="startDate" name="startDate">
+        <input v-model="startDate" type="date" id="startDate" name="startDate">
     </div>
     <div class="form-group">
         <label for="endDate">End Date:</label>
         <!-- Using date input type for details see: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/date -->
         <!-- input value is of the format yyyy-MM-dd by default -->
-        <input ng-model="$ctrl.endDate" type="date" id="endDate" name="endDate">
+        <input v-model="endDate" type="date" id="endDate" name="endDate">
     </div>
-    <button class="btn btn-default" ng-click="$ctrl.queryObservation()">Find step-count as FHIR STU3 Observation</button>
+    <button class="btn btn-default" v-on:click="handleClick()">Find step-count as FHIR STU3 Observation</button>
 </form>
 
 
@@ -39,7 +39,7 @@
 
 <script>
 
-import Patient from '../services/patientService';
+import Patient from '../services/activityService';
 
 export default {
   name: 'DrishtiActivity',
@@ -53,6 +53,8 @@ export default {
       search: '',
       isLoading: false,
       arrowCounter: 0,
+      startDate: '',
+      endDate: '',
     };
   },
   created() {
@@ -60,89 +62,38 @@ export default {
   },
   computed: {
     error() {
-      return Patient.state.error.patients;
+      return Activity.state.error.patients;
     },
     pending() {
-      return Patient.state.pending.patients;
+      return Activity.state.pending.patients;
     },
-    patients() {
-      return Patient.state.patients.results;
+    activity() {
+      return Activity.state.patients.results;
     },
+    session() {
+      return Session.state.session;
+    },
+
   },
   methods: {
 
-    onChange() {
-      // Let's warn the parent that a change was made
-      this.$emit('input', this.search);
+            handleClick() {
+                console.log(process.env.VUE_APP_googleFitShim);
+                let omhSevice = new OmhService(this.session.user.uuid);
+                omhSevice.login(process.env.VUE_APP_googleFitShim);
+                console.log(this.session.user.uuid);
+            },
 
-      // Send request
-
-      const params = { q: this.search };
-      Patient.dispatch('queryPatients', { params });
-
-
-      // Is the data given by an outside ajax request?
-      if (this.pending) {
-        this.isLoading = true;
-      } else if (this.patients) {
-        // Let's search our flat array
-        this.filterResults();
-        this.isOpen = true;
-      }
-    },
-
-    filterResults() {
-      // first uncapitalize all the things
-      // this.results = this.items
-      this.results = this.patients
-        .filter(item => item.toLowerCase().indexOf(this.search.toLowerCase()) > -1);
-    },
-
-    setResult(result) {
-      this.search = result;
-      this.isOpen = false;
-    },
-
-    onArrowDown(evt) {
-      if (this.arrowCounter < this.results.length) {
-        this.arrowCounter = this.arrowCounter + 1;
-        console.log(evt);
-      }
-    },
-    onArrowUp() {
-      if (this.arrowCounter > 0) {
-        this.arrowCounter = this.arrowCounter - 1;
-      }
-    },
-    onEnter() {
-      this.search = this.results[this.arrowCounter];
-      this.isOpen = false;
-      this.arrowCounter = -1;
-    },
-    handleClickOutside(evt) {
-      if (!this.$el.contains(evt.target)) {
-        this.isOpen = false;
-        this.arrowCounter = -1;
-      }
-    },
   },
 
   watch: {
-    items(val, oldValue) {
-      // actually compare them
-      if (val.length !== oldValue.length) {
-        this.results = val;
-        this.isLoading = false;
-      }
-    },
+
   },
 
   mounted() {
-    document.addEventListener('click', this.handleClickOutside);
   },
 
   destroyed() {
-    document.removeEventListener('click', this.handleClickOutside);
   },
 
 };
