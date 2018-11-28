@@ -79,9 +79,10 @@ export default {
   methods: {
 
       handleClick() {
-          const dateParam = new Date(this.startDate);
+          const startDateParam = new Date(this.startDate);
+          const endDateParam = new Date(this.endDate);
           const params = {
-              date: dateParam.toISOString().substring(0, 10),
+              date: `{startDateParam.toISOString().substring(0, 10)},{endDateParam.toISOString().substring(0, 10)}`,
               subject: this.$store.state.shimmerId,
 
           };
