@@ -26,13 +26,12 @@
     <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>
     Searching for STU3 Observations...
 </div>
+    <ul>
 
-    <!--<div v-if="activity.length > 0" class="container-fluid" id="observationResponse">-->
-    <pre>
-        {{activity}}
-    </pre>
-    <!--</div>-->
-
+        <li v-for="(result, i) in results" :key="i">
+        {{ result }}
+        </li>
+    </ul>
 </div>
 
 </template>
@@ -63,10 +62,10 @@ export default {
   },
   computed: {
     error() {
-      return Activity.state.error.patients;
+      return Activity.state.error.act;
     },
     pending() {
-      return Activity.state.pending.patients;
+      return Activity.state.pending.act;
     },
     activity() {
         return Activity.state.act;
@@ -86,6 +85,7 @@ export default {
 
           };
           Activity.dispatch('queryActivity', {params});
+          this.results = this.activity.entry;
           console.log(this.session.user.uuid);
       },
 
