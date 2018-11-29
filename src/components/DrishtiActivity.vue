@@ -12,12 +12,12 @@
         <!-- input value is of the format yyyy-MM-dd by default -->
         <input v-model="startDate" type="date" id="startDate" name="startDate">
     </div>
-    <div class="form-group">
-        <label for="endDate">End Date:</label>
-        <!-- Using date input type for details see: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/date -->
-        <!-- input value is of the format yyyy-MM-dd by default -->
-        <input v-model="endDate" type="date" id="endDate" name="endDate">
-    </div>
+    <!--<div class="form-group">-->
+    <!--<label for="endDate">End Date:</label>-->
+    <!--&lt;!&ndash; Using date input type for details see: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/date &ndash;&gt;-->
+    <!--&lt;!&ndash; input value is of the format yyyy-MM-dd by default &ndash;&gt;-->
+    <!--<input v-model="endDate" type="date" id="endDate" name="endDate">-->
+    <!--</div>-->
     <button class="btn btn-default" @click.prevent="handleClick()">Find step-count as FHIR STU3 Observation</button>
 </form>
 
@@ -27,11 +27,11 @@
     Searching for STU3 Observations...
 </div>
 
-    <div v-if="activity.length > 0" class="container-fluid" id="observationResponse">
+    <!--<div v-if="activity.length > 0" class="container-fluid" id="observationResponse">-->
     <pre>
         {{activity}}
     </pre>
-</div>
+    <!--</div>-->
 
 </div>
 
@@ -69,7 +69,7 @@ export default {
       return Activity.state.pending.patients;
     },
     activity() {
-        return Activity.state.acts;
+        return Activity.state.act;
     },
     session() {
       return Session.state.session;
@@ -80,9 +80,8 @@ export default {
 
       handleClick() {
           const startDateParam = new Date(this.startDate);
-          const endDateParam = new Date(this.endDate);
           const params = {
-              date: `{startDateParam.toISOString().substring(0, 10)},{endDateParam.toISOString().substring(0, 10)}`,
+              date: startDateParam.toISOString().substring(0, 10),
               subject: this.$store.state.shimmerId,
 
           };

@@ -6,9 +6,9 @@
   </div>
 </template>
 <script>
-    import DrishtiActivity from "../components/DrishtiActivity";
+    import DrishtiActivity from '../components/DrishtiActivity';
 
     export default {
-        components: {DrishtiActivity}
-    }
+        components: {DrishtiActivity},
+    };
 </script>

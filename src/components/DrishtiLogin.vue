@@ -68,12 +68,12 @@
 
         mounted() {
             /*
-                    The vue-router query string has the following issue
-                    https://github.com/vuejs/vue-router/issues/2125
-                    Hence using URLSearchParams as described here:
-                    https://www.npmjs.com/package/url-search-params-polyfill
-                    TODO: Change once the vue-router bug is fixed
-                     */
+                            The vue-router query string has the following issue
+                            https://github.com/vuejs/vue-router/issues/2125
+                            Hence using URLSearchParams as described here:
+                            https://www.npmjs.com/package/url-search-params-polyfill
+                            TODO: Change once the vue-router bug is fixed
+                             */
             // if (this.$route.query.loginSuccess == 'true') {
             //     this.$router.push('/about');
             // }

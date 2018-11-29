@@ -26,7 +26,7 @@ location: json.sessionLocation
  */
     .get({
     action: 'queryActivity',
-        property: 'acts',
+        property: 'act',
     queryParams: true,
     path: `${process.env.VUE_APP_omhOnFhirAPIBase}/Observation`,
   })
