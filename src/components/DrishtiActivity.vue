@@ -28,8 +28,11 @@
 </div>
     <ul>
 
-        <li v-for="(result, i) in results" :key="i">
-        {{ result }}
+        <li v-for="(result, i) in activity.entry" :key="i">
+            {{i}}. {{ result.resource.effectivePeriod.start }} | {{ result.resource.effectivePeriod.end }} - STEPS:
+            <div v-for="(component, j) in result.resource.component" :key="j">
+                {{ component.valueQuantity.value}}
+            </div>
         </li>
     </ul>
 </div>
@@ -85,7 +88,6 @@ export default {
 
           };
           Activity.dispatch('queryActivity', {params});
-          this.results = this.activity.entry;
           console.log(this.session.user.uuid);
       },
 
