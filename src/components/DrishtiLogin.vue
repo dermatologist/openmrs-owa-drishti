@@ -5,7 +5,7 @@
             {{alertMsg}}
         </div>
         <div>SHIMMER ID: {{ $store.state.shimmerId }}</div>
-        <div>Hello {{session.user.display}}</div>
+        <div>Hello :</div>
         <p>Select one of the fitness tracking applications below,
             and complete its authorization process, to link this
             application to the account.</p>

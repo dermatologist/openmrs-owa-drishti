@@ -3,7 +3,7 @@
 
 <div id="activity">
 <h1>Activity</h1>
-    <h2>Search Patient Activity for patient: {{session.user.display}}</h2>
+    <h2>Search Patient Activity for patient: {{ search }}</h2>
 <form>
     <h4>Search for activity between date range</h4>
     <div class="form-group">
@@ -43,7 +43,7 @@
 
     import Activity from '../services/activityService';
     import Session from '../services/sessionService';
-    import Observations from '../services/fhirService';
+    import Bundles from '../services/fhirService';
 
     export default {
   name: 'DrishtiActivity',
@@ -89,11 +89,14 @@
 
           };
           Activity.dispatch('queryActivity', {params});
-          console.log(this.session.user.uuid);
+          this.search = this.session.user.display;
       },
 
       createObs(obs) {
-          Observations(this.session.user.uuid, 'create', obs);
+          // Ad patient
+          obs.subject.reference = "Patient/" + this.session.user.uuid;
+          Bundles(this.session.user.uuid, 'create', obs);
+          console.log(obs);
       },
 
   },

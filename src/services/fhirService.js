@@ -1,11 +1,37 @@
 import 'fhirclient';
 
-const Observations = function Observations(pId, operation, payload) {
+const Bundles = function Bundles(pId, operation, payload) {
     const smart = window.FHIR.client({
         serviceUrl: process.env.VUE_APP_omhOnFhirAPIBase + '/fhir',
         // smart-1137192
         patientId: pId,
     });
+
+
+    /*
+    Document type bundle.
+    The first entry is a composition
+
+     */
+    const bundle = {
+        "resourceType": "Bundle",
+        "meta": {
+            "lastUpdated": new Date().toISOString()
+        },
+        "type": "document",
+        "entry": [{
+            "fullUrl": process.env.VUE_APP_omhOnFhirAPIBase + "/fhir/Observation/" + payload.id,
+            "resource": payload
+        },
+            {
+                "fullUrl": process.env.VUE_APP_omhOnFhirAPIBase + "/fhir/Patient/" + pId,
+                "resource": {
+                    "resourceType": "Patient",
+                    "id": pId, "name": [{"family": ["Patient"], "given": ["Generic"]}]
+                }
+            }
+        ]
+    };
 
     // const smart = window.FHIR.oauth2.authorize({
     //   client: {
@@ -17,9 +43,9 @@ const Observations = function Observations(pId, operation, payload) {
 
     // $.Deferred
     if (operation === 'search')
-        return smart.patient.api.search({type: 'Observation'});
+        return smart.patient.api.search({type: 'Bundle'});
     if (operation === 'create')
-        return smart.api.create({resource: payload});
+        return smart.api.create({resource: bundle});
     if (operation === 'update')
         return smart.api.update({resource: payload});
     if (operation === 'delete')
@@ -27,4 +53,4 @@ const Observations = function Observations(pId, operation, payload) {
 
 };
 
-export default Observations;
+export default Bundles;
