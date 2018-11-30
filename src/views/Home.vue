@@ -16,7 +16,7 @@ import DrishtiLogin from '@/components/DrishtiLogin.vue';
 export default {
   name: 'home',
   components: {
-      HelloPatient, DrishtiLogin,
+      DrishtiLogin,
   },
 };
 </script>
