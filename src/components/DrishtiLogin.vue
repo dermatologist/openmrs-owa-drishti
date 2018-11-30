@@ -4,13 +4,14 @@
         <div class="alert-warning" v-if="alertMsg">
             {{alertMsg}}
         </div>
-        <div>{{ $store.state.shimmerId }}</div>
+        <div>SHIMMER ID: {{ $store.state.shimmerId }}</div>
+        <div>Hello {{session.user.display}}</div>
         <p>Select one of the fitness tracking applications below,
             and complete its authorization process, to link this
             application to the account.</p>
         <div>
             <a class="btn btn-default" v-on:click="handleClick()"><img
-                    :src="logoUrl" height="25" width="99"></a>
+                    :src="logoUrl" height="25" width="99">GoogleFit</a>
         </div>
     </div>
 

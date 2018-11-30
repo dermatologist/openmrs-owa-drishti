@@ -1,8 +1,8 @@
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
+    <h1>Drishti</h1>
     <div>You are now logged in!</div>
-    <DrishtiActivity msg="Welcome to Your Vue.js App"/>
+    <DrishtiActivity msg="Welcome to Drishti App"/>
   </div>
 </template>
 <script>
