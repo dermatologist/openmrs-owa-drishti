@@ -30,7 +30,7 @@
 
         <li v-for="(result, i) in activity.entry" :key="i">
             {{i}}. {{ result.resource.effectivePeriod.start }} | {{ result.resource.effectivePeriod.end }} - STEPS:
-            <div v-for="(component, j) in result.resource.component" :key="j">
+            <div :key="j" @click="createObs(result.resource)" v-for="(component, j) in result.resource.component">
                 {{ component.valueQuantity.value}}
             </div>
         </li>
@@ -43,6 +43,7 @@
 
     import Activity from '../services/activityService';
     import Session from '../services/sessionService';
+    import Observations from '../services/fhirService';
 
     export default {
   name: 'DrishtiActivity',
@@ -89,6 +90,10 @@
           };
           Activity.dispatch('queryActivity', {params});
           console.log(this.session.user.uuid);
+      },
+
+      createObs(obs) {
+          Observations(this.session.user.uuid, 'create', obs);
       },
 
   },
