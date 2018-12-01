@@ -30,11 +30,12 @@
 
         <li v-for="(result, i) in activity.entry" :key="i">
             {{i}}. {{ result.resource.effectivePeriod.start }} | {{ result.resource.effectivePeriod.end }} - STEPS:
-            <div :key="j" @click="createObs(result.resource)" v-for="(component, j) in result.resource.component">
+            <div :key="j" @click="createObs(result)" v-for="(component, j) in result.resource.component">
                 {{ component.valueQuantity.value}}
             </div>
         </li>
     </ul>
+    <button @click="addAll(activity.entry)" class="btn btn-primary">Add all to drishti</button>
 </div>
 
 </template>
@@ -94,11 +95,20 @@
 
       createObs(obs) {
           // Ad patient
-          obs.subject.reference = "Patient/" + this.session.user.uuid;
+          obs.resource.subject.reference = "Patient/" + this.session.user.uuid;
           Bundles(this.session.user.uuid, 'create', obs);
           console.log(obs);
       },
 
+      addAll(allObs) {
+          let entries = [];
+          let uuid = this.session.user.uuid;
+          allObs.forEach(function (element) {
+              element.resource.subject.reference = "Patient/" + uuid;
+              entries.push(element);
+          });
+          Bundles(this.session.user.uuid, 'create', entries);
+      },
   },
 
   watch: {

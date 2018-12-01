@@ -19,10 +19,7 @@ const Bundles = function Bundles(pId, operation, payload) {
             "lastUpdated": new Date().toISOString()
         },
         "type": "document",
-        "entry": [{
-            "fullUrl": process.env.VUE_APP_omhOnFhirAPIBase + "/fhir/Observation/" + payload.id,
-            "resource": payload
-        },
+        "entry": [
             {
                 "fullUrl": process.env.VUE_APP_omhOnFhirAPIBase + "/fhir/Patient/" + pId,
                 "resource": {
@@ -32,6 +29,11 @@ const Bundles = function Bundles(pId, operation, payload) {
             }
         ]
     };
+
+    if (payload.constructor === Array)
+        bundle.entry.concat(payload);
+    else
+        bundle.entry.push(payload);
 
     // const smart = window.FHIR.oauth2.authorize({
     //   client: {
