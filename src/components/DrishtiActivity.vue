@@ -36,6 +36,7 @@
         </li>
     </ul>
     <button @click="addAll(activity.entry)" class="btn btn-primary">Add all to drishti</button>
+    <div v-if="resolved" class="alert alert-info">Done!</div>
 </div>
 
 </template>
@@ -60,6 +61,7 @@
       arrowCounter: 0,
       startDate: '',
       endDate: '',
+        deferredPromise: null,
     };
   },
   created() {
@@ -78,6 +80,15 @@
     session() {
       return Session.state.session;
     },
+      resolved() {
+          if (this.deferredPromise != null && this.deferredPromise.state() === 'rejected') {
+              return false;
+          }
+          if (this.deferredPromise != null) {
+              return true;
+          }
+          return false;
+      },
 
   },
   methods: {
@@ -107,7 +118,7 @@
               element.resource.subject.reference = "Patient/" + uuid;
               entries.push(element);
           });
-          Bundles(this.session.user.uuid, 'create', entries);
+          this.deferredPromise = Bundles(this.session.user.uuid, 'create', entries);
       },
   },
 
