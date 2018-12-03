@@ -1,4 +1,5 @@
 import 'fhirclient';
+import axios from 'axios';
 
 const Bundles = function Bundles(pId, operation, payload) {
     const smart = window.FHIR.client({
@@ -21,10 +22,16 @@ const Bundles = function Bundles(pId, operation, payload) {
         "type": "document",
         "entry": [
             {
-                "fullUrl": process.env.VUE_APP_omhOnFhirAPIBase + "/fhir/Patient/" + pId,
                 "resource": {
                     "resourceType": "Patient",
-                    "id": pId, "name": [{"family": ["Patient"], "given": ["Generic"]}]
+                    "id": pId,
+                    "identifier": [
+                        {
+                            "system": "urn:system",
+                            "value": pId
+                        }
+                    ],
+                    "name": [{"family": ["Patient"], "given": ["Generic"]}]
                 }
             }
         ]
@@ -46,13 +53,19 @@ const Bundles = function Bundles(pId, operation, payload) {
     // $.Deferred
     if (operation === 'search')
         return smart.patient.api.search({type: 'Bundle'});
-    if (operation === 'create')
-        return smart.api.create({resource: bundle});
+    // if (operation === 'create')
+    //     return smart.api.create({resource: bundle});
     if (operation === 'update')
         return smart.api.update({resource: payload});
     if (operation === 'delete')
         return smart.api.delete({resource: payload});
 
+    if (operation === 'create') {
+        return axios.post('/ProcessBundle', {
+            uuid: pId,
+            bundle: bundle
+        });
+    }
 };
 
 export default Bundles;
