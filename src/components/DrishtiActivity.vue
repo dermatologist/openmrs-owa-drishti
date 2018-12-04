@@ -81,9 +81,9 @@
       return Session.state.session;
     },
       resolved() {
-          if (this.deferredPromise != null && this.deferredPromise.state() === 'rejected') {
-              return false;
-          }
+          // if (this.deferredPromise != null && this.deferredPromise.state() === 'rejected') {
+          //     return false;
+          // }
           if (this.deferredPromise != null) {
               return true;
           }

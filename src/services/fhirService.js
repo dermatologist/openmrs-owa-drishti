@@ -14,34 +14,37 @@ const Bundles = function Bundles(pId, operation, payload) {
     The first entry is a composition
 
      */
-    const bundle = {
+    let bundle = {
         "resourceType": "Bundle",
         "meta": {
             "lastUpdated": new Date().toISOString()
         },
-        "type": "document",
-        "entry": [
-            {
-                "resource": {
-                    "resourceType": "Patient",
-                    "id": pId,
-                    "identifier": [
-                        {
-                            "system": "urn:system",
-                            "value": pId
-                        }
-                    ],
-                    "name": [{"family": ["Patient"], "given": ["Generic"]}]
-                }
-            }
-        ]
+        "type": "document"
     };
 
-    if (payload.constructor === Array)
-        bundle.entry.concat(payload);
-    else
-        bundle.entry.push(payload);
+    let entries = [
+        {
+            "resource": {
+                "resourceType": "Patient",
+                "id": pId,
+                "identifier": [
+                    {
+                        "system": "urn:system",
+                        "value": pId
+                    }
+                ],
+                "name": [{"family": ["Patient"], "given": ["Generic"]}]
+            }
+        }
+    ];
 
+    if (Array.isArray(payload)) {
+        bundle.entry = entries.concat(payload);
+
+    } else {
+        entries.push(payload);
+        bundle.entry = entries;
+    }
     // const smart = window.FHIR.oauth2.authorize({
     //   client: {
     //     client_id: 'my_web_app',
@@ -61,10 +64,11 @@ const Bundles = function Bundles(pId, operation, payload) {
         return smart.api.delete({resource: payload});
 
     if (operation === 'create') {
-        return axios.post('/ProcessBundle', {
-            uuid: pId,
-            bundle: bundle
-        });
+        bundle.id = pId;
+        console.log("2");
+        console.log(bundle);
+        console.log(payload);
+        return axios.post(process.env.VUE_APP_omhOnFhirAPIBase + '/ProcessBundle', bundle);
     }
 };
 
