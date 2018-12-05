@@ -12,6 +12,8 @@
 
 ## Work in progress. Not ready for use.
 
+[![Drishti](https://raw.github.com/E-Health/drishti/develop/notes/drishti.png)](http://canehealth.com)
+
 ## Project setup
 ```
 yarn install
