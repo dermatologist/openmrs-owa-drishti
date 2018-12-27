@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const Bundles = function Bundles(pId, operation, payload) {
     const smart = window.FHIR.client({
-        serviceUrl: process.env.VUE_APP_omhOnFhirAPIBase + '/fhir',
+        serviceUrl: process.env.VUE_APP_omhOnFhirAPIBase + process.env.VUE_APP_omhOnFhirPath,
         // smart-1137192
         patientId: pId,
     });
